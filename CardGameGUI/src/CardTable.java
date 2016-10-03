@@ -1,10 +1,7 @@
 import javax.swing.*;
-
+import javax.swing.border.TitledBorder;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.GridLayout;
-
-import javax.swing.JFrame;
 
 public class CardTable extends JFrame {
 
@@ -25,17 +22,28 @@ public class CardTable extends JFrame {
 		
 		pnlHumanHand = new JPanel();
 		pnlHumanHand.setLayout(new GridLayout(1,numCardsPerHand));
+		TitledBorder humanBorder = new TitledBorder("You");
+		humanBorder.setTitleJustification(TitledBorder.LEFT);
+		humanBorder.setTitlePosition(TitledBorder.TOP);
+		pnlHumanHand.setBorder(humanBorder);
 		this.add(pnlHumanHand, BorderLayout.SOUTH);
-		pnlHumanHand.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+		
+		
 		
 		pnlComputerHand = new JPanel();
 		pnlComputerHand.setLayout(new GridLayout(1,numCardsPerHand));
-		pnlComputerHand.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+		TitledBorder cpuBorder = new TitledBorder("Computer");
+		cpuBorder.setTitleJustification(TitledBorder.LEFT);
+		cpuBorder.setTitlePosition(TitledBorder.TOP);
+		pnlComputerHand.setBorder(cpuBorder);
 		this.add(pnlComputerHand, BorderLayout.NORTH);
 		
 		pnlPlayArea = new JPanel();
 		pnlPlayArea.setLayout(new GridLayout(numPlayers, numPlayers));
-		pnlPlayArea.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+		TitledBorder playBorder = new TitledBorder("Played Cards");
+		playBorder.setTitleJustification(TitledBorder.LEFT);
+		playBorder.setTitlePosition(TitledBorder.TOP);
+		pnlPlayArea.setBorder(playBorder);
 		this.add(pnlPlayArea, BorderLayout.CENTER);	
 	}
 	

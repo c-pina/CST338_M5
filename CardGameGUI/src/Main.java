@@ -24,28 +24,32 @@ public class Main {
       myCardTable.setVisible(true);
       
       // CREATE LABELS ----------------------------------------------------
-      String stringArray = new String(Card.valueRanks);
       Card myCard = new Card();
       for (int i = 0; i < NUM_CARDS_PER_HAND; i ++)
       {
          myCard=deck.dealCard();
-         computerLabels[i] = new JLabel(CardGUI.getBackCardIcon());
-         humanLabels[i] = new JLabel(CardGUI.getIcon(myCard));
+         computerLabels[i] = new JLabel(CardGUI.getBackCardIcon(), JLabel.CENTER);
+         humanLabels[i] = new JLabel(CardGUI.getIcon(myCard), JLabel.CENTER);
       }
       myCard=deck.dealCard();
-      playedCardLabels[0] = new JLabel(CardGUI.getIcon(myCard));
+      playedCardLabels[0] = new JLabel(CardGUI.getIcon(myCard), JLabel.CENTER);
       myCard=deck.dealCard();
-      playedCardLabels[1] = new JLabel(CardGUI.getIcon(myCard));
+      playedCardLabels[1] = new JLabel(CardGUI.getIcon(myCard), JLabel.CENTER);
+      playedCardLabels[0].setVerticalAlignment(JLabel.BOTTOM);
+      playedCardLabels[1].setVerticalAlignment(JLabel.BOTTOM);
       
-      playLabelText[0] = new JLabel("Computer");
-      playLabelText[1] = new JLabel("You");
+      playLabelText[0] = new JLabel("Computer", JLabel.CENTER);
+      playLabelText[1] = new JLabel("You", JLabel.CENTER);
+      playLabelText[0].setVerticalAlignment(JLabel.TOP);
+      playLabelText[1].setVerticalAlignment(JLabel.TOP);
+
       
         
      // ADD LABELS TO PANELS -----------------------------------------
      for (int j = 0; j < NUM_CARDS_PER_HAND; j++)
      {
-        myCardTable.pnlComputerHand.add(computerLabels[j], JLabel.CENTER);
-        myCardTable.pnlHumanHand.add(humanLabels[j], JLabel.CENTER);
+        myCardTable.pnlComputerHand.add(computerLabels[j]);
+        myCardTable.pnlHumanHand.add(humanLabels[j]);
      }
             
       // and two random cards in the play region (simulating a computer/hum ply)
