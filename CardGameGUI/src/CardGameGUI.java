@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class CST338_Assignment5_CardGameGUI
+public class CardGameGUI
 {
    static final int NUM_CARD_IMAGES = 57;
    static Icon[] icon = new ImageIcon[NUM_CARD_IMAGES];

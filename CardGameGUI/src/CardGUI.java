@@ -11,15 +11,15 @@ public class CardGUI {
     {
        if(iconCards[0][0] == null)
        {
-          CST338_Assignment5_CardGameGUI.loadCardIcons();
+          CardGameGUI.loadCardIcons();
           for(int j = 0; j < 4; j++)
           {
              for (int k = 0; k < 14; k++)
              {
-                iconCards[k][j] = CST338_Assignment5_CardGameGUI.icon[(j * (iconCards.length)) + k];
+                iconCards[k][j] = CardGameGUI.icon[(j * (iconCards.length)) + k];
              }
           }
-          iconBack = CST338_Assignment5_CardGameGUI.icon[CST338_Assignment5_CardGameGUI.NUM_CARD_IMAGES - 1];
+          iconBack = CardGameGUI.icon[CardGameGUI.NUM_CARD_IMAGES - 1];
       }
     }
     
