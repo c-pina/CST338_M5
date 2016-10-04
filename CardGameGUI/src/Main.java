@@ -69,12 +69,12 @@ public class Main
    {
       if (playLabelText[0] != null) 
       {
-         this.myCardTable.pnlPlayArea.remove(playLabelText[0]);
+         this.myCardTable.pnlGameStatus.remove(playLabelText[0]);
       }
 
       JLabel label = new JLabel(text, JLabel.CENTER);
       label.setVerticalAlignment(JLabel.TOP);
-      this.myCardTable.pnlPlayArea.add(label);
+      this.myCardTable.pnlGameStatus.add(label);
       playLabelText[0] = label;
       this.myCardTable.setVisible(true);
    }
