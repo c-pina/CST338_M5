@@ -11,7 +11,7 @@ public class CardTable extends JFrame {
    private int numCardsPerHand;
    private int numPlayers;
 
-   public JPanel pnlComputerHand, pnlHumanHand, pnlPlayArea, pnlGameStatus;
+   public JPanel pnlComputerHand, pnlHumanHand, pnlPlayArea, pnlGameStatus, pnlHumanPot;
 
 
    CardTable(String title, int numCardsPerHand, int numPlayers)
@@ -28,14 +28,6 @@ public class CardTable extends JFrame {
       pnlComputerHand.setBorder(cpuBorder);
       this.add(pnlComputerHand, BorderLayout.NORTH);
       
-      pnlPlayArea = new JPanel();
-      pnlPlayArea.setLayout(new GridLayout(numPlayers, numPlayers));
-      TitledBorder playBorder = new TitledBorder("Played Cards");
-      playBorder.setTitleJustification(TitledBorder.LEFT);
-      playBorder.setTitlePosition(TitledBorder.TOP);
-      pnlPlayArea.setBorder(playBorder);
-      this.add(pnlPlayArea, BorderLayout.CENTER);
-      
       pnlGameStatus = new JPanel();
       pnlGameStatus.setLayout(new GridLayout(1,1));
       TitledBorder gameStatusBorder = new TitledBorder("Game Status");
@@ -43,6 +35,22 @@ public class CardTable extends JFrame {
       gameStatusBorder.setTitlePosition(TitledBorder.TOP);
       pnlGameStatus.setBorder(gameStatusBorder);
       this.add(pnlGameStatus, BorderLayout.WEST);
+      
+      pnlPlayArea = new JPanel();
+      pnlPlayArea.setLayout(new GridLayout(numPlayers, numPlayers));
+      TitledBorder playBorder = new TitledBorder("Last Played Cards");
+      playBorder.setTitleJustification(TitledBorder.LEFT);
+      playBorder.setTitlePosition(TitledBorder.TOP);
+      pnlPlayArea.setBorder(playBorder);
+      this.add(pnlPlayArea, BorderLayout.CENTER);
+      
+      pnlHumanPot = new JPanel();
+      pnlHumanPot.setLayout(new GridLayout(1,numCardsPerHand));
+      TitledBorder humanPotBorder = new TitledBorder("Your Winnings");
+      humanPotBorder.setTitleJustification(TitledBorder.LEFT);
+      humanPotBorder.setTitlePosition(TitledBorder.TOP);
+      pnlHumanPot.setBorder(humanPotBorder);
+      this.add(pnlHumanPot, BorderLayout.EAST);
       
       pnlHumanHand = new JPanel();
       pnlHumanHand.setLayout(new GridLayout(1,numCardsPerHand));

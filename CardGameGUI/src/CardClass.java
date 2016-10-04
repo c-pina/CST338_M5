@@ -1,7 +1,19 @@
 
 class Card
 {
-   public enum Suit  { clubs, diamonds, hearts, spades };
+   public enum Suit { 
+      clubs(0), diamonds(1), hearts(2), spades(3);
+
+      private final int value;
+      private Suit(int value) {
+          this.value = value;
+      }
+
+      public int getValue() {
+          return value;
+      }
+   };
+   
    public static char[] valueRanks = {'A','2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'X'};
    
    private char value;

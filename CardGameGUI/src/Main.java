@@ -1,11 +1,20 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
+import Card.Suit;
+
 public class Main 
 {
+   public enum HandResult {
+      Lose,
+      Win,
+      Tie
+   }
+   
    static int NUM_CARDS_PER_HAND = 7;
    static int  NUM_PLAYERS = 2;
    static JLabel[] computerLabels = new JLabel[NUM_CARDS_PER_HAND];
@@ -15,6 +24,12 @@ public class Main
    
    CardGameFramework highCardGame;
    CardTable myCardTable;
+   
+   ArrayList<Card> cardsComputerHasCaptured = new ArrayList<Card>();
+   ArrayList<Card> cardsHumanHasCaptured = new ArrayList<Card>();
+   
+   Card lastPlayedHumanCard = null;
+   Card lastPlayedComputerCard = null;
    
    public void startGame()
    {
@@ -94,33 +109,134 @@ public class Main
    
    private void handleAction(ActionEvent e)
    {
-      if (!this.HaveAllCardsBeenPlayed())
-      {
-         // get the tapped card from the human's hand and play it
-         int cardIndex = Integer.parseInt(e.getActionCommand());
-         Card card = this.highCardGame.playCard(0, cardIndex);
+      // get the tapped card from the human's hand and play it
+      int cardIndex = Integer.parseInt(e.getActionCommand());
+      this.lastPlayedHumanCard = this.highCardGame.playCard(0, cardIndex);
+      
+      // remove all cards from the playing area
+      this.myCardTable.pnlPlayArea.removeAll();
 
-         // add card to the playing area
-         JLabel playedCardLabel = new JLabel(CardGUI.getIcon(card));
-         this.myCardTable.pnlPlayArea.add(playedCardLabel, JLabel.CENTER);
-         this.displayTurnLabelForHuman(false);
-         this.reloadHumanHand();
-         this.PlayComputerHand();   
-      } 
-      else
+      // add card to the playing area
+      JLabel playedCardLabel = new JLabel(CardGUI.getIcon(this.lastPlayedHumanCard));
+      this.myCardTable.pnlPlayArea.add(playedCardLabel, JLabel.CENTER);
+      this.reloadHumanHand();
+      this.playComputerHand();
+      this.checkGameResults();
+   }
+   
+   private void checkGameResults()
+   {
+      if (this.highCardGame.getHand(0).getNumCards() == 0 && this.highCardGame.getHand(1).getNumCards() == 0)
       {
-         this.displayTextOnLabel("Game Over!");
+         String resultsString = null;
+         
+         if (this.cardsHumanHasCaptured.size() > this.cardsComputerHasCaptured.size())
+         {
+            resultsString = "Game Over -- You won by capturing " + this.cardsHumanHasCaptured.size() + " of the computer's cards!";  
+         }
+         else if (this.cardsHumanHasCaptured.size() < this.cardsComputerHasCaptured.size())
+         {
+            resultsString = "Game Over -- You lost! Computer captured " + this.cardsComputerHasCaptured.size() + " of your cards!";
+         }
+         else
+         {
+            resultsString = "Game over -- Tie Game!";
+         }
+         
+         this.displayTextOnLabel(resultsString);
       }
    }
    
-   private void PlayComputerHand()
+   private HandResult handResultForHumanCard(Card humanCard, Card computerCard)
+   {
+      char humanValue = humanCard.getValue();
+      char computerValue = computerCard.getValue();
+      
+      // cards are equal, joker ties (only case), otherwise rank wins
+      if (humanValue == computerValue)
+      {
+         if (humanValue == 'X')
+         {
+            return HandResult.Tie;
+         }
+         
+         if (humanCard.getSuit().getValue() > computerCard.getSuit().getValue())
+         {
+            return HandResult.Win;
+         }
+         else
+         {
+            return HandResult.Lose;
+         }
+      }
+      else
+      {
+         // cards aren't equal, joker wins, otherwise card value wins
+         if (humanValue == 'X')
+         {
+            return HandResult.Win;
+         }
+         
+         if (computerValue == 'X')
+         {
+            return HandResult.Lose;
+         }
+         
+         // check for Ace, special case
+         if (humanValue == 'A')
+         {
+            return HandResult.Win; 
+         }
+         
+         if (computerValue == 'A')
+         {
+            return HandResult.Lose; 
+         }
+         
+         // now all others
+         if (humanValue > computerValue)
+         {
+            return HandResult.Win;
+         }
+         else
+         {
+            return HandResult.Lose;
+         }
+      }
+   }
+   
+   private void determineWinningHand()
+   {
+      HandResult result = this.handResultForHumanCard(this.lastPlayedHumanCard, this.lastPlayedComputerCard);
+      
+      // human won, add to the pot
+      if (result == HandResult.Win)
+      {
+         this.displayTextOnLabel("Win");
+         this.cardsHumanHasCaptured.add(this.lastPlayedComputerCard);
+         JLabel wonCard = new JLabel(CardGUI.getIcon(this.lastPlayedComputerCard));
+         this.myCardTable.pnlHumanPot.add(wonCard, JLabel.CENTER);
+      } 
+      else if (result == HandResult.Lose)
+      {
+         this.cardsComputerHasCaptured.add(this.lastPlayedHumanCard);
+         this.displayTextOnLabel("Lose");
+      }
+      else
+      {
+         this.displayTextOnLabel("Tie");
+      }
+      
+      this.myCardTable.setVisible(true);
+   }
+   
+   private void playComputerHand()
    {
       Hand hand = this.highCardGame.getHand(1);
-      Card card = this.highCardGame.playCard(1, 0);
-      System.out.println(card);
+      this.lastPlayedComputerCard = this.highCardGame.playCard(1, 0);
       
       // add card to view
-      JLabel playedCardLabel = new JLabel(CardGUI.getIcon(card));
+      JLabel playedCardLabel = new JLabel(CardGUI.getIcon(this.lastPlayedComputerCard));
       this.myCardTable.pnlPlayArea.add(playedCardLabel, JLabel.CENTER);
       
       // remove all the cards from the computer's hand and reload
@@ -140,7 +256,7 @@ public class Main
          }
       }
       
-      this.displayTurnLabelForHuman(true);
+      this.determineWinningHand();
    }
     
    public void reloadHumanHand()
@@ -174,11 +290,6 @@ public class Main
       this.myCardTable.setVisible(true);
    }
    
-   private Boolean HaveAllCardsBeenPlayed()
-   {
-      return this.highCardGame.getHand(0).getNumCards() == 0 && this.highCardGame.getHand(1).getNumCards() == 0;
-   }
-
    private JLabel labelForCard(Card card, int index)
    {
       JLabel label = new JLabel(CardGUI.getIcon(card));
