@@ -34,22 +34,27 @@ class Hand {
       return false;
    }
    
-   //removes the Card in the top position of the myCard array
+   //removes the Card in the nth position of the myCard array
+   public Card playCard(int index)
+   {
+      if (numCards > 0)
+      {
+         Card tempCard = myCards[index];
+         myCards[index] = null;
+         numCards--;
+
+         return tempCard;
+      }
+      else
+      {
+         Card tempCard = new Card('0', Card.Suit.clubs);
+         return tempCard;
+      }
+   }
+   
    public Card playCard()
    {
-	   if (numCards > 0)
-	   {
-		   Card tempCard = myCards[numCards - 1];
-		   myCards[numCards - 1] = null;
-		   numCards--;
-      
-		   return tempCard;
-	   }
-	   else
-	      {
-	         Card tempCard = new Card('0', Card.Suit.clubs);
-	         return tempCard;
-	      }
+      return this.playCard(myCards.length - 1);
    }
    
    //Places the entire hand into a string for display
@@ -71,12 +76,39 @@ class Hand {
       return numCards;
    }
    
+   //removes the nulls outta here
+   public Card[] validCards()
+   {
+      Card[] validCards = new Card[this.myCards.length];
+      for (int i = 0; i < this.myCards.length; i++)
+      {
+         validCards[i] = this.myCards[i];
+      }
+      
+      for (int i = 0; i < validCards.length; i++)
+      {
+         Card tempCard = validCards[i];
+         int nextIndex = i + 1;
+         if (nextIndex < validCards.length - 1)
+         {
+            if (tempCard == null)
+            {
+               validCards[i] = validCards[i + 1];
+               validCards[i + 1] = tempCard;
+            }
+         }         
+      }
+      
+      this.myCards = validCards;
+      
+      return validCards;
+   }
+   
    //returns the card at element k in the myCard array. If k is invalid an invalid card is created and returned.
    public Card inspectCard(int k)
    {
       if ((k >= 0) && (k < numCards ))
       {
-         
          return myCards[k];
       }
       else
