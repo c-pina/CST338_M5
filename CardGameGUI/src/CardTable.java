@@ -30,6 +30,7 @@ public class CardTable extends JFrame {
       
       pnlGameStatus = new JPanel();
       pnlGameStatus.setLayout(new GridLayout(1,1));
+     
       TitledBorder gameStatusBorder = new TitledBorder("Game Status");
       gameStatusBorder.setTitleJustification(TitledBorder.LEFT);
       gameStatusBorder.setTitlePosition(TitledBorder.TOP);
@@ -45,7 +46,7 @@ public class CardTable extends JFrame {
       this.add(pnlPlayArea, BorderLayout.CENTER);
       
       pnlHumanPot = new JPanel();
-      pnlHumanPot.setLayout(new GridLayout(1,numCardsPerHand));
+      pnlHumanPot.setLayout(new GridLayout(2,numCardsPerHand/2));
       TitledBorder humanPotBorder = new TitledBorder("Your Winnings");
       humanPotBorder.setTitleJustification(TitledBorder.LEFT);
       humanPotBorder.setTitlePosition(TitledBorder.TOP);

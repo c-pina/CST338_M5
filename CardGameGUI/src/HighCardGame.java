@@ -5,9 +5,7 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
-import Card.Suit;
-
-public class Main 
+public class HighCardGame
 {
    public enum HandResult {
       Lose,
@@ -20,7 +18,7 @@ public class Main
    static JLabel[] computerLabels = new JLabel[NUM_CARDS_PER_HAND];
    JLabel[] humanLabels = new JLabel[NUM_CARDS_PER_HAND];  
    static JLabel[] playedCardLabels  = new JLabel[NUM_PLAYERS]; 
-   static JLabel[] playLabelText  = new JLabel[NUM_PLAYERS];
+   static JTextArea[] gameStatusText  = new JTextArea[NUM_PLAYERS];
    
    CardGameFramework highCardGame;
    CardTable myCardTable;
@@ -39,11 +37,16 @@ public class Main
       Card[] unusedCardsPerPack = null;    
 
       // establish main frame in which program will run
-      this.myCardTable = new CardTable("CardTable", NUM_CARDS_PER_HAND, NUM_PLAYERS);
+      this.myCardTable = new CardTable("High Card", NUM_CARDS_PER_HAND, NUM_PLAYERS);
       this.myCardTable.setSize(800, 600);
       this.myCardTable.setLocationRelativeTo(null);
       this.myCardTable.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+      this.myCardTable.pnlComputerHand.setPreferredSize(new Dimension(750, 125));
+      this.myCardTable.pnlHumanHand.setPreferredSize(new Dimension(750, 125));
+      this.myCardTable.pnlHumanPot.setPreferredSize(new Dimension(500, 350));
+      this.myCardTable.pnlGameStatus.setPreferredSize(new Dimension(160, 350));
+      this.myCardTable.pnlPlayArea.setPreferredSize(new Dimension(140, 350));
+      
       this.highCardGame = new CardGameFramework(
             numPacksPerDeck, 
             numJokersPerPack,  
@@ -82,15 +85,17 @@ public class Main
    
    private void displayTextOnLabel(String text)
    {
-      if (playLabelText[0] != null) 
+      if (gameStatusText[0] != null) 
       {
-         this.myCardTable.pnlGameStatus.remove(playLabelText[0]);
+         this.myCardTable.pnlGameStatus.remove(gameStatusText[0]);
       }
-
       JLabel label = new JLabel(text, JLabel.CENTER);
       label.setVerticalAlignment(JLabel.TOP);
-      this.myCardTable.pnlGameStatus.add(label);
-      playLabelText[0] = label;
+      JTextArea textArea = new JTextArea(text);
+      textArea.setLineWrap(true);
+      textArea.setEditable(false);
+      gameStatusText[0] = textArea;
+      this.myCardTable.pnlGameStatus.add(gameStatusText[0]);
       this.myCardTable.setVisible(true);
    }
    
@@ -132,11 +137,11 @@ public class Main
          
          if (this.cardsHumanHasCaptured.size() > this.cardsComputerHasCaptured.size())
          {
-            resultsString = "Game Over -- You won by capturing " + this.cardsHumanHasCaptured.size() + " of the computer's cards!";  
+            resultsString = "Game Over -- You won\n by capturing " + this.cardsHumanHasCaptured.size() + "\n of the computer's cards!";  
          }
          else if (this.cardsHumanHasCaptured.size() < this.cardsComputerHasCaptured.size())
          {
-            resultsString = "Game Over -- You lost! Computer captured " + this.cardsComputerHasCaptured.size() + " of your cards!";
+            resultsString = "Game Over -- You lost! \n Computer captured " + this.cardsComputerHasCaptured.size() + "\n of your cards!";
          }
          else
          {
@@ -309,7 +314,7 @@ public class Main
    
    public static void main(String[] args)
    {     
-      Main main = new Main();
+      HighCardGame main = new HighCardGame();
       main.startGame();
    }
 }
